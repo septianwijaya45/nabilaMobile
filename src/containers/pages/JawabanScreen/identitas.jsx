@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios';
 import {View, Text, StyleSheet, ScrollView, TextInput, Button, Alert} from 'react-native'
 import {useNavigation} from '@react-navigation/core';
 import {
@@ -8,6 +9,48 @@ import { WARNA_ABU_ABU, WARNA_SEKUNDER, WARNA_TEXT, WARNA_TEXT_WELCOME, WARNA_UT
 
 const IdentitasScreen = () => {
   const navigation = useNavigation();
+
+  const [nama, setNama] = useState();
+  const [telepon, setTelepon] = useState();
+  const [alamat, setAlamat] = useState();
+  
+  const postIdentitas = () => {
+    const data = {
+      nama,
+      telepon,
+      alamat
+    };
+
+    if(nama != undefined || telepon != undefined || alamat != undefined){
+      console.log(data);
+      axios.post('http://192.168.1.6:80/nabilaWebApp/api/responden', data)
+        .then(res => {
+          if(res.data.status == true){
+            let id = res.data.id;
+            Alert.alert('Berhasil!', 'Berhasil Menambahkan Responden!', [
+              {
+                text: 'Ok',
+                onPress: () => {
+                  navigation.push('PertanyaanScreen', {id});
+                },
+              },
+            ]);
+          }
+        })
+        .catch(err => {
+          Alert.alert('Error!', 'Network Error!', [
+            {text: 'ok'}
+          ]);
+          console.log('Error: ', err);
+        })
+    }else{
+      Alert.alert('Gagal!', 'Form Harus Diisi Semua!', [
+        {
+          text: 'Ok'
+        }
+      ])
+    }
+  }
 
     return (
         <ScrollView style={styles.pages}>
@@ -21,6 +64,7 @@ const IdentitasScreen = () => {
                     placeholder="Masukkan Nama"
                     placeholderTextColor={WARNA_TEXT_WELCOME}
                     width="100%"
+                    onChangeText={(value) => setNama(value)}
                   />
                 </View>
               </View>
@@ -33,6 +77,7 @@ const IdentitasScreen = () => {
                     keyboardType='numeric'
                     placeholderTextColor={WARNA_TEXT_WELCOME}
                     width="100%"
+                    onChangeText={(value) => setTelepon(value)}
                   />
                 </View>
               </View>
@@ -46,6 +91,7 @@ const IdentitasScreen = () => {
                     numberOfLines={10}
                     placeholderTextColor={WARNA_TEXT_WELCOME}
                     width="100%"
+                    onChangeText={(value) => setAlamat(value)}
                   />
                 </View>
               </View>
@@ -63,7 +109,7 @@ const IdentitasScreen = () => {
                   }} />
                 </View>
                 <View style={{marginLeft: windowWidth * 0.3}}>
-                  <Button type="Text" title="Selanjutnya" onPress={() => navigation.navigate('PertanyaanScreen')} />
+                  <Button type="Text" title="Selanjutnya" onPress={() => postIdentitas()} />
                 </View>
               </View>
             </View>

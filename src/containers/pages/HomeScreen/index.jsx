@@ -9,66 +9,10 @@ import { WARNA_ABU_ABU, WARNA_SEKUNDER, WARNA_UTAMA, windowHeight, windowWidth }
 const HomeScreen = () => {
     
     const navigation = useNavigation();
-    const data = {
-        labels: ["January", "February", "March", "April", "May", "June"],
-        datasets: [
-          {
-            data: [20, 45, 28, 80, 99, 43]
-          }
-        ]
-    };
 
     return (
         <View style={styles.pages}>
             <Text style={styles.title}>Aplikasi Survey</Text>
-            <View style={styles.divGraphic}>
-                <View style={styles.titleGraphic}>
-                    <Text style={styles.textGraphic}>Total Survey Saat Ini</Text>
-                </View>
-                <View style={styles.graphic}>
-                    <LineChart
-                        data={{
-                        labels: ["January", "February", "March", "April", "May", "June"],
-                        datasets: [
-                            {
-                            data: [
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100
-                            ]
-                            }
-                        ]
-                        }}
-                        width={Dimensions.get("window").width - 25} // from react-native
-                        height={220}
-                        yAxisLabel="$"
-                        yAxisSuffix="k"
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={{
-                            backgroundColor: "#ffffff",
-                            decimalPlaces: 2, // optional, defaults to 2dp
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                        style: {
-                            borderRadius: 16
-                        },
-                        propsForDots: {
-                            r: "2",
-                            strokeWidth: "2",
-                            stroke: "#ffffff"
-                        }
-                        }}
-                        bezier
-                        style={{
-                            marginVertical: 8,
-                            borderRadius: 16
-                        }}
-                    />
-                </View>
-            </View>
             <View style={styles.divGraphic}>
                 <View style={styles.titleMenu}>
                     <Text style={styles.textTitleMenu}>Main Menu</Text>
@@ -77,8 +21,8 @@ const HomeScreen = () => {
                     <TouchableOpacity style={styles.subMenu1} onPress={() => { navigation.navigate('IdentitasScreen') }}>
                         <Text style={styles.textSubmenu}>Isi Survey</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.subMenu2}>
-                        <Text style={styles.textSubmenu}>Lihat Responden</Text>
+                    <TouchableOpacity style={styles.subMenu2} onPress={() => { navigation.navigate('GrafikScreen') }}>
+                        <Text style={styles.textSubmenu}>Lihat Grafik</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -107,19 +51,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6F1F1',  
         borderRadius: 12,
         marginTop: 10,
-        marginHorizontal: 5
-    },
-    titleGraphic: {
-        marginHorizontal: 10,
-        marginVertical: 5
-    },
-    textGraphic: {
-        color: '#000000',
-        fontSize: 12,
-        fontFamily: 'sans-serif'
-    },  
-    graphic: {
-        marginHorizontal: 10
+        marginHorizontal: 5,
+        height: windowHeight
     },
     titleMenu: {
         marginHorizontal: 10,
@@ -128,12 +61,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'sans-serif',
         color: '#000000',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 30
     },
     menu: {
         flexDirection: 'row',
         justifyContent: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 50
     },
     subMenu1: {
         marginHorizontal: 10,
